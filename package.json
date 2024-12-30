@@ -2,17 +2,17 @@
   "name": "free-games-claimer",
   "version": "1.4.0",
   "description": "Automatically claims free games on the Epic Games Store, Amazon Prime Gaming and GOG.",
-  "homepage": "https://github.com/vogler/free-games-claimer",
+  "homepage": "https://github.com/caycehouse/free-games-claimer",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vogler/free-games-claimer.git"
+    "url": "https://github.com/caycehouse/free-games-claimer.git"
   },
-  "author": "Ralf Vogler",
+  "author": "Cayce House",
   "license": "AGPL-3.0-only",
   "main": "index.js",
   "scripts": {
-    "docker:build": "docker build . -t ghcr.io/vogler/free-games-claimer",
-    "docker": "cross-env-shell docker run --rm -it -p 5900:5900 -p 6080:6080 -v \\\"$INIT_CWD/data\\\":/fgc/data --name fgc ghcr.io/vogler/free-games-claimer",
+    "docker:build": "docker build . -t ghcr.io/caycehouse/free-games-claimer",
+    "docker": "cross-env-shell docker run --rm -it -p 5900:5900 -p 6080:6080 -v \\\"$INIT_CWD/data\\\":/fgc/data --name fgc ghcr.io/caycehouse/free-games-claimer",
     "lint": "npx eslint ."
   },
   "type": "module",

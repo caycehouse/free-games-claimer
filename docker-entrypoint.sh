@@ -2,7 +2,7 @@
 
 set -eo pipefail # exit on error, error on any fail in pipe (not just last cmd); add -x to print each cmd; see gist bash_strict_mode.md
 
-echo "Version: https://github.com/vogler/free-games-claimer/tree/${COMMIT}"
+echo "Version: https://github.com/caycehouse/free-games-claimer/tree/${COMMIT}"
 [ ! -z $BRANCH ] && [ $BRANCH != "main" ] && echo "Branch: ${BRANCH}"
 echo "Build: $NOW"
 

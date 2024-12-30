@@ -123,7 +123,7 @@ export const notify = html => new Promise((resolve, reject) => {
     if (error) {
       console.log(`error: ${error.message}`);
       if (error.message.includes('command not found')) {
-        console.info('Run `pip install apprise`. See https://github.com/vogler/free-games-claimer#notifications');
+        console.info('Run `pip install apprise`. See https://github.com/caycehouse/free-games-claimer#notifications');
       }
       return reject(error);
     }

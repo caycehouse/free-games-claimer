@@ -2,7 +2,6 @@
 <img alt="logo-free-games-claimer" src="https://user-images.githubusercontent.com/493741/214588518-a4c89998-127e-4a8c-9b1e-ee4a9d075715.png" />
 </p>
 
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=vogler_free-games-claimer&metric=code_smells)](https://sonarcloud.io/project/overview?id=vogler_free-games-claimer)
 # free-games-claimer
 
 Claims free games periodically on
@@ -23,7 +22,7 @@ Raspberry Pi (3, 4, Zero 2): [requires 64-bit OS](https://github.com/vogler/free
 ## How to run
 Easy option: [install Docker](https://docs.docker.com/get-docker/) (or [podman](https://podman-desktop.io/)) and run this command in a terminal:
 ```
-docker run --rm -it -p 6080:6080 -v fgc:/fgc/data --pull=always ghcr.io/vogler/free-games-claimer
+docker run --rm -it -p 6080:6080 -v fgc:/fgc/data --pull=always ghcr.io/caycehouse/free-games-claimer
 ```
 
 _This currently gives you a captcha challenge for epic-games. Until [issue #183](https://github.com/vogler/free-games-claimer/issues/183) is fixed, it is recommended to just run `node epic-games` without docker (see below)._
@@ -165,7 +164,7 @@ TODO: ~~add some server-mode where the script just keeps running and claims game
 
 ### Problems?
 
-Check the open [issues](https://github.com/vogler/free-games-claimer/issues) and comment there or open a new issue.
+Check the open [issues](https://github.com/caycehouse/free-games-claimer/issues) and comment there or open a new issue.
 
 If you're a developer, you can use `PWDEBUG=1 ...` to [inspect](https://playwright.dev/docs/inspector) which opens a debugger where you can step through the script.
 
@@ -212,8 +211,8 @@ Added OTP generation via otplib for automatic login, even with 2FA.
 Added notifications via [apprise](https://github.com/caronc/apprise).
 </details>
 
-[![Star History Chart](https://api.star-history.com/svg?repos=vogler/free-games-claimer&type=Date)](https://star-history.com/#vogler/free-games-claimer&Date)
-<!-- [![Stargazers over time](https://starchart.cc/vogler/free-games-claimer.svg?variant=adaptive)](https://starchart.cc/vogler/free-games-claimer) -->
+[![Star History Chart](https://api.star-history.com/svg?repos=caycehouse/free-games-claimer&type=Date)](https://star-history.com/#caycehouse/free-games-claimer&Date)
+<!-- [![Stargazers over time](https://starchart.cc/caycehouse/free-games-claimer.svg?variant=adaptive)](https://starchart.cc/caycehouse/free-games-claimer) -->
 
 ![Alt](https://repobeats.axiom.co/api/embed/a1c5e6e420d90e0d6b34c1285e92a69a44138faa.svg "Repobeats analytics image")
 

@@ -34,7 +34,7 @@ if (process.env.NOVNC_PORT) {
   // date = await execp('git show -s --format=%ch'); // %ch is same as --date=human (short/relative)
 }
 
-const gh = await (await fetch('https://api.github.com/repos/vogler/free-games-claimer/commits/main', {
+const gh = await (await fetch('https://api.github.com/repos/caycehouse/free-games-claimer/commits/main', {
   // headers: { accept: 'application/vnd.github.VERSION.sha' }
 })).json();
 // log(gh);
