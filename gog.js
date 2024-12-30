@@ -24,7 +24,7 @@ const context = await chromium.launchPersistentContext(cfg.dir.browser, {
     '--use-angle=gl-egl',
   ],
   headless: false,
-  viewport: null,
+  viewport: { width: cfg.width, height: cfg.height },
   locale: 'en-US', // ignore OS locale to be sure to have english text for locators -> done via /en in URL
   recordVideo: cfg.record ? { dir: 'data/record/', size: { width: cfg.width, height: cfg.height } } : undefined, // will record a .webm video for each page navigated; without size, video would be scaled down to fit 800x800
   recordHar: cfg.record ? { path: `data/record/gog-${filenamify(datetime())}.har` } : undefined, // will record a HAR file with network requests and responses; can be imported in Chrome devtools
@@ -36,6 +36,8 @@ handleSIGINT(context);
 if (!cfg.debug) context.setDefaultTimeout(cfg.timeout);
 
 const page = context.pages().length ? context.pages()[0] : await context.newPage(); // should always exist
+await page.setViewportSize({ width: cfg.width, height: cfg.height }); // TODO workaround for https://github.com/vogler/free-games-claimer/issues/277 until Playwright fixes it
+// console.debug('userAgent:', await page.evaluate(() => navigator.userAgent));
 
 const notify_games = [];
 let user;
