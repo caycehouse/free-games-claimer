@@ -1,7 +1,7 @@
-import { firefox } from 'playwright-firefox'; // stealth plugin needs no outdated playwright-extra
+import { chromium } from 'patchright';
 import { authenticator } from 'otplib';
 import chalk from 'chalk';
-import { resolve, jsonDb, datetime, stealth, filenamify, prompt, confirm, notify, html_game_list, handleSIGINT } from './src/util.js';
+import { resolve, jsonDb, datetime, filenamify, prompt, confirm, notify, html_game_list, handleSIGINT } from './src/util.js';
 import { cfg } from './src/config.js';
 
 const screenshot = (...a) => resolve(cfg.dir.screenshots, 'prime-gaming', ...a);
@@ -14,8 +14,14 @@ console.log(datetime(), 'started checking prime-gaming');
 const db = await jsonDb('prime-gaming.json', {});
 
 // https://playwright.dev/docs/auth#multi-factor-authentication
-const context = await firefox.launchPersistentContext(cfg.dir.browser, {
-  headless: cfg.headless,
+const context = await chromium.launchPersistentContext(cfg.dir.browser, {
+  channel: 'chrome',
+  args: [
+    '--ignore-gpu-blocklist',
+    '--use-gl=angle',
+    '--use-angle=gl-egl',
+  ],
+  headless: false,
   viewport: { width: cfg.width, height: cfg.height },
   locale: 'en-US', // ignore OS locale to be sure to have english text for locators
   recordVideo: cfg.record ? { dir: 'data/record/', size: { width: cfg.width, height: cfg.height } } : undefined, // will record a .webm video for each page navigated; without size, video would be scaled down to fit 800x800
@@ -25,14 +31,9 @@ const context = await firefox.launchPersistentContext(cfg.dir.browser, {
 
 handleSIGINT(context);
 
-// TODO test if needed
-await stealth(context);
-
 if (!cfg.debug) context.setDefaultTimeout(cfg.timeout);
 
 const page = context.pages().length ? context.pages()[0] : await context.newPage(); // should always exist
-await page.setViewportSize({ width: cfg.width, height: cfg.height }); // TODO workaround for https://github.com/vogler/free-games-claimer/issues/277 until Playwright fixes it
-// console.debug('userAgent:', await page.evaluate(() => navigator.userAgent));
 
 const notify_games = [];
 let user;
@@ -41,7 +42,7 @@ try {
   await page.goto(URL_CLAIM, { waitUntil: 'domcontentloaded' }); // default 'load' takes forever
   // need to wait for some elements to exist before checking if signed in or accepting cookies:
   await Promise.any(['button:has-text("Sign in")', '[data-a-target="user-dropdown-first-name-text"]'].map(s => page.waitForSelector(s)));
-  page.click('[aria-label="Cookies usage disclaimer banner"] button:has-text("Accept Cookies")').catch(_ => { }); // to not waste screen space when non-headless, TODO does not work reliably, need to wait for something else first?
+  page.click('[aria-label="Cookies usage disclaimer banner"] button:has-text("Accept Cookies")').catch(_ => { });
   while (await page.locator('button:has-text("Sign in")').count() > 0) {
     console.error('Not signed in anymore.');
     await page.click('button:has-text("Sign in")');
@@ -55,7 +56,7 @@ try {
       await page.fill('[name=email]', email);
       await page.click('input[type="submit"]');
       await page.fill('[name=password]', password);
-      await page.check('[name=rememberMe]');
+      // await page.check('[name=rememberMe]');
       await page.click('input[type="submit"]');
       page.waitForURL('**/ap/signin**').then(async () => { // check for wrong credentials
         const error = await page.locator('.a-alert-content').first().innerText();
@@ -76,11 +77,6 @@ try {
     } else {
       console.log('Waiting for you to login in the browser.');
       await notify('prime-gaming: no longer signed in and not enough options set for automatic login.');
-      if (cfg.headless) {
-        console.log('Run `SHOW=1 node prime-gaming` to login in the opened browser.');
-        await context.close(); // finishes potential recording
-        process.exit(1);
-      }
     }
     await page.waitForURL('https://gaming.amazon.com/home?signedIn=true');
     if (!cfg.debug) context.setDefaultTimeout(cfg.timeout);
@@ -359,7 +355,7 @@ try {
     await loot.waitFor();
 
     process.stdout.write('Loading all DLCs on page...');
-    await scrollUntilStable(() => loot.locator('[data-a-target="item-card"]').count())
+    await scrollUntilStable(() => loot.locator('[data-a-target="item-card"]').count());
 
     console.log('\nNumber of already claimed DLC:', await loot.locator('p:has-text("Collected")').count());
 

@@ -1,4 +1,4 @@
-import { firefox } from 'playwright-firefox'; // stealth plugin needs no outdated playwright-extra
+import { chromium } from 'patchright';
 import { resolve, jsonDb, datetime, filenamify, prompt, notify, html_game_list, handleSIGINT } from './src/util.js';
 import { cfg } from './src/config.js';
 
@@ -16,8 +16,14 @@ if (cfg.width < 1280) { // otherwise 'Sign in' and #menuUsername are hidden (but
 }
 
 // https://playwright.dev/docs/auth#multi-factor-authentication
-const context = await firefox.launchPersistentContext(cfg.dir.browser, {
-  headless: cfg.headless,
+const context = await chromium.launchPersistentContext(cfg.dir.browser, {
+  channel: 'chrome',
+  args: [
+    '--ignore-gpu-blocklist',
+    '--use-gl=angle',
+    '--use-angle=gl-egl',
+  ],
+  headless: false,
   viewport: { width: cfg.width, height: cfg.height },
   locale: 'en-US', // ignore OS locale to be sure to have english text for locators -> done via /en in URL
   recordVideo: cfg.record ? { dir: 'data/record/', size: { width: cfg.width, height: cfg.height } } : undefined, // will record a .webm video for each page navigated; without size, video would be scaled down to fit 800x800
@@ -37,7 +43,7 @@ const notify_games = [];
 let user;
 
 try {
-  await context.addCookies([{ name: 'CookieConsent', value: '{stamp:%274oR8MJL+bxVlG6g+kl2we5+suMJ+Tv7I4C5d4k+YY4vrnhCD+P23RQ==%27%2Cnecessary:true%2Cpreferences:true%2Cstatistics:true%2Cmarketing:true%2Cmethod:%27explicit%27%2Cver:1%2Cutc:1672331618201%2Cregion:%27de%27}', domain: 'www.gog.com', path: '/' }]); // to not waste screen space when non-headless
+  await context.addCookies([{ name: 'CookieConsent', value: '{stamp:%274oR8MJL+bxVlG6g+kl2we5+suMJ+Tv7I4C5d4k+YY4vrnhCD+P23RQ==%27%2Cnecessary:true%2Cpreferences:true%2Cstatistics:true%2Cmarketing:true%2Cmethod:%27explicit%27%2Cver:1%2Cutc:1672331618201%2Cregion:%27de%27}', domain: 'www.gog.com', path: '/' }]);
 
   await page.goto(URL_CLAIM, { waitUntil: 'domcontentloaded' }); // default 'load' takes forever
 
@@ -81,11 +87,6 @@ try {
     } else {
       console.log('Waiting for you to login in the browser.');
       await notify('gog: no longer signed in and not enough options set for automatic login.');
-      if (cfg.headless) {
-        console.log('Run `SHOW=1 node gog` to login in the opened browser.');
-        await context.close();
-        process.exit(1);
-      }
     }
     await page.waitForSelector('#menuUsername');
     if (!cfg.debug) context.setDefaultTimeout(cfg.timeout);

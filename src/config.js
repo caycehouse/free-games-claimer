@@ -11,10 +11,6 @@ export const cfg = {
   time: process.env.TIME == '1', // log duration of each step
   dryrun: process.env.DRYRUN == '1', // don't claim anything
   interactive: process.env.INTERACTIVE == '1', // confirm to claim, default skip
-  show: process.env.SHOW == '1', // run non-headless
-  get headless() {
-    return !this.debug && !this.show;
-  },
   width: Number(process.env.WIDTH) || 1920, // width of the opened browser
   height: Number(process.env.HEIGHT) || 1080, // height of the opened browser
   timeout: (Number(process.env.TIMEOUT) || 60) * 1000, // default timeout for playwright is 30s
@@ -41,9 +37,6 @@ export const cfg = {
   gog_email: process.env.GOG_EMAIL || process.env.EMAIL,
   gog_password: process.env.GOG_PASSWORD || process.env.PASSWORD,
   gog_newsletter: process.env.GOG_NEWSLETTER == '1', // do not unsubscribe from newsletter after claiming a game
-  // auth AliExpress
-  ae_email: process.env.AE_EMAIL || process.env.EMAIL,
-  ae_password: process.env.AE_PASSWORD || process.env.PASSWORD,
   // OTP only via GOG_EMAIL, can't add app...
   // experimmental
   pg_redeem: process.env.PG_REDEEM == '1', // prime-gaming: redeem keys on external stores
