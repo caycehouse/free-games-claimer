@@ -1,4 +1,4 @@
-import { firefox } from 'playwright-firefox'; // stealth plugin needs no outdated playwright-extra
+import { chromium } from 'patchright';
 import { resolve, jsonDb, datetime, filenamify, prompt, notify, html_game_list, handleSIGINT } from './src/util.js';
 import { cfg } from './src/config.js';
 
@@ -16,7 +16,8 @@ if (cfg.width < 1280) { // otherwise 'Sign in' and #menuUsername are hidden (but
 }
 
 // https://playwright.dev/docs/auth#multi-factor-authentication
-const context = await firefox.launchPersistentContext(cfg.dir.browser, {
+const context = await chromium.launchPersistentContext(cfg.dir.browser, {
+  channel: "chrome",
   headless: cfg.headless,
   viewport: { width: cfg.width, height: cfg.height },
   locale: 'en-US', // ignore OS locale to be sure to have english text for locators -> done via /en in URL

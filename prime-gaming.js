@@ -1,4 +1,4 @@
-import { firefox } from 'playwright-firefox'; // stealth plugin needs no outdated playwright-extra
+import { chromium } from 'patchright';
 import { authenticator } from 'otplib';
 import chalk from 'chalk';
 import { resolve, jsonDb, datetime, stealth, filenamify, prompt, confirm, notify, html_game_list, handleSIGINT } from './src/util.js';
@@ -14,7 +14,8 @@ console.log(datetime(), 'started checking prime-gaming');
 const db = await jsonDb('prime-gaming.json', {});
 
 // https://playwright.dev/docs/auth#multi-factor-authentication
-const context = await firefox.launchPersistentContext(cfg.dir.browser, {
+const context = await chromium.launchPersistentContext(cfg.dir.browser, {
+  channel: "chrome",
   headless: cfg.headless,
   viewport: { width: cfg.width, height: cfg.height },
   locale: 'en-US', // ignore OS locale to be sure to have english text for locators
@@ -24,9 +25,6 @@ const context = await firefox.launchPersistentContext(cfg.dir.browser, {
 });
 
 handleSIGINT(context);
-
-// TODO test if needed
-await stealth(context);
 
 if (!cfg.debug) context.setDefaultTimeout(cfg.timeout);
 

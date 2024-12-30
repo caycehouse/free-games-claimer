@@ -1,8 +1,9 @@
-import { firefox } from 'playwright-firefox'; // stealth plugin needs no outdated playwright-extra
-import { datetime, filenamify, prompt, handleSIGINT, stealth } from './src/util.js';
+import { chromium } from 'patchright';
+import { datetime, filenamify, prompt, handleSIGINT } from './src/util.js';
 import { cfg } from './src/config.js';
 
-const context = await firefox.launchPersistentContext(cfg.dir.browser, {
+const context = await chromium.launchPersistentContext(cfg.dir.browser, {
+  channel: "chrome",
   headless: cfg.headless,
   viewport: { width: cfg.width, height: cfg.height },
   locale: 'en-US', // ignore OS locale to be sure to have english text for locators -> done via /en in URL
@@ -11,7 +12,6 @@ const context = await firefox.launchPersistentContext(cfg.dir.browser, {
   handleSIGINT: false, // have to handle ourselves and call context.close(), otherwise recordings from above won't be saved
 });
 handleSIGINT(context);
-await stealth(context);
 
 context.setDefaultTimeout(cfg.debug ? 0 : cfg.timeout);
 

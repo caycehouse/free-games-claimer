@@ -8,7 +8,7 @@ FROM ubuntu:jammy
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 ARG DEBIAN_FRONTEND=noninteractive
 
-# Install up-to-date node & npm, deps for virtual screen & noVNC, firefox, pip for apprise.
+# Install up-to-date node & npm, deps for virtual screen & noVNC, chrome, pip for apprise.
 RUN apt-get update \
     && apt-get install --no-install-recommends -y curl ca-certificates gnupg \
     && mkdir -p /etc/apt/keyrings \
@@ -60,6 +60,7 @@ RUN npm install
 # Old: PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD + install firefox (had to be done after `npm install` to get the correct version). Now: playwright-firefox as npm dep and `npm install` will only install that.
 # From 1.38 Playwright will no longer install browser automatically for playwright, but apparently still for playwright-firefox: https://github.com/microsoft/playwright/releases/tag/v1.38.0
 # RUN npx playwright install firefox
+RUN npx patchright install chrome
 
 COPY . .
 
