@@ -2,7 +2,7 @@
 
 set -eo pipefail # exit on error, error on any fail in pipe (not just last cmd); add -x to print each cmd; see gist bash_strict_mode.md
 
-echo "Version: https://github.com/vogler/free-games-claimer/tree/${COMMIT}"
+echo "Version: https://github.com/caycehouse/free-games-claimer/tree/${COMMIT}"
 [ ! -z $BRANCH ] && [ $BRANCH != "main" ] && echo "Branch: ${BRANCH}"
 echo "Build: $NOW"
 
@@ -38,7 +38,7 @@ rm -f /tmp/.X1-lock
 # −screen NUM WxHxD creates the screen and sets its width, height, and depth
 
 export DISPLAY=:1 # need to export this, otherwise playwright complains with 'Looks like you launched a headed browser without having a XServer running.'
-Xvfb $DISPLAY -ac -screen 0 "${WIDTH}x${HEIGHT}x${DEPTH}" &
+Xvfb $DISPLAY -ac -screen 0 "${WIDTH}x${HEIGHT}x${DEPTH}" +extension GLX +render &
 echo "Xvfb display server created screen with resolution ${WIDTH}x${HEIGHT}"
 if [ -z "$VNC_PASSWORD" ]; then
   pw="-nopw"

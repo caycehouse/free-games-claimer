@@ -1,0 +1,8 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    ":skipStatusChecks",
+    "github>caycehouse/renovate-config",
+    "github>caycehouse/renovate-config:autoMerge.json5"
+  ]
+}
