@@ -27,6 +27,11 @@ if (existsSync(browserPrefs)) {
 // https://playwright.dev/docs/auth#multi-factor-authentication
 const context = await chromium.launchPersistentContext(cfg.dir.browser, {
   channel: 'chrome',
+  args: [
+    '--ignore-gpu-blocklist',
+    '--use-gl=angle',
+    '--use-angle=gl-egl',
+  ],
   headless: false,
   viewport: null,
   locale: 'en-US', // ignore OS locale to be sure to have english text for locators
@@ -40,7 +45,6 @@ handleSIGINT(context);
 if (!cfg.debug) context.setDefaultTimeout(cfg.timeout);
 
 const page = context.pages().length ? context.pages()[0] : await context.newPage(); // should always exist
-await page.setViewportSize({ width: cfg.width, height: cfg.height }); // TODO workaround for https://github.com/vogler/free-games-claimer/issues/277 until Playwright fixes it
 
 // some debug info about the page (screen dimensions, user agent, platform)
 if (cfg.debug) console.debug(await page.evaluate(() => [(({ width, height, availWidth, availHeight }) => ({ width, height, availWidth, availHeight }))(window.screen), navigator.userAgent, navigator.platform, navigator.vendor])); // deconstruct screen needed since `window.screen` prints {}, `window.screen.toString()` '[object Screen]', and can't use some pick function without defining it on `page`
@@ -74,15 +78,10 @@ try {
     console.info(`Login timeout is ${cfg.login_timeout / 1000} seconds!`);
     await page.goto(URL_LOGIN, { waitUntil: 'domcontentloaded' });
     if (cfg.eg_email && cfg.eg_password) console.info('Using email and password from environment.');
-    else console.info('Press ESC to skip the prompts if you want to login in the browser (not possible in headless mode).');
+    else console.info('Press ESC to skip the prompts if you want to login in the browser.');
     const notifyBrowserLogin = async () => {
       console.log('Waiting for you to login in the browser.');
       await notify('epic-games: no longer signed in and not enough options set for automatic login.');
-      if (cfg.headless) {
-        console.log('Run `SHOW=1 node epic-games` to login in the opened browser.');
-        await context.close(); // finishes potential recording
-        process.exit(1);
-      }
     };
     const email = cfg.eg_email || await prompt({ message: 'Enter email' });
     if (!email) await notifyBrowserLogin();

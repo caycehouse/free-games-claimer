@@ -1,4 +1,4 @@
-FROM ubuntu:noble
+FROM node:20-bookworm-slim
 
 ENV DEBIAN_FRONTEND="noninteractive" \
     PIP_BREAK_SYSTEM_PACKAGES=1 \
@@ -6,30 +6,25 @@ ENV DEBIAN_FRONTEND="noninteractive" \
 
 # hadolint ignore=DL3008,DL3013,DL4006
 RUN apt-get update \
-    && apt-get install --no-install-recommends -y curl ca-certificates gnupg \
-    && mkdir -p /etc/apt/keyrings \
-    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
-    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
-    && apt-get update \
     && apt-get install --no-install-recommends -y \
-      nodejs \
-      xvfb \
-      x11vnc \
-      tini \
-      novnc websockify \
       dos2unix \
+      novnc \
       python3-pip \
+      tini \
+      websockify \
+      x11vnc \
+      xvfb \
     && apt-get install --no-install-recommends -y \
-      libgtk-3-0 \
-      libasound2t64 \
-      libxcomposite1 \
-      libpangocairo-1.0-0 \
-      libpango-1.0-0 \
+      libasound2 \
       libatk1.0-0 \
       libcairo-gobject2 \
       libcairo2 \
-      libgdk-pixbuf-2.0-0 \
       libdbus-glib-1-2 \
+      libgdk-pixbuf-2.0-0 \
+      libgtk-3-0 \
+      libpango-1.0-0 \
+      libpangocairo-1.0-0 \
+      libxcomposite1 \
       libxcursor1 \
     && apt-get autoremove -y \
     && apt-get clean \
@@ -81,9 +76,6 @@ EXPOSE 6080
 ENV WIDTH 1920
 ENV HEIGHT 1080
 ENV DEPTH 24
-
-# Show browser instead of running headless
-ENV SHOW 1
 
 ENTRYPOINT ["docker-entrypoint.sh"]
 

@@ -45,10 +45,9 @@ If you don't want to use Docker for quasi-headless mode, you could run inside a 
 </details>
 
 ## Usage
-All scripts start an automated Firefox instance, either with the browser GUI shown or hidden (*headless mode*). By default, you won't see any browser open on your host system.
+All scripts start an automated Chrome instance, with the browser GUI shown.
 
 - When running inside Docker, the browser will be shown only inside the container. You can open http://localhost:6080 to interact with the browser running inside the container via noVNC (or use other VNC clients on port 5900).
-- When running the scripts outside of Docker, the browser will be hidden by default; you can use `SHOW=1 ...` to show the UI (see options below).
 
 When running the first time, you have to login for each store you want to claim games on.
 You can login indirectly via the terminal or directly in the browser. The scripts will wait until you are successfully logged in.
@@ -66,7 +65,6 @@ Available options/variables and their default values:
 
 | Option        	| Default 	| Description                                                            	|
 |---------------	|---------	|------------------------------------------------------------------------	|
-| SHOW          	| 1       	| Show browser if 1. Default for Docker, not shown when running outside. 	|
 | WIDTH         	| 1280    	| Width of the opened browser (and of screen for VNC in Docker).         	|
 | HEIGHT        	| 1280    	| Height of the opened browser (and of screen for VNC in Docker).        	|
 | VNC_PASSWORD  	|         	| VNC password for Docker. No password used by default!                  	|
@@ -101,7 +99,7 @@ You can pass variables using `-e VAR=VAL`, for example `docker run -e EMAIL=foo@
 If you are using [docker compose](https://docs.docker.com/compose/environment-variables/) (or Portainer etc.), you can put options in the `environment:` section.
 
 ##### Without Docker
-On Linux/macOS you can prefix the variables you want to set, for example `EMAIL=foo@bar.baz SHOW=1 node epic-games` will show the browser and skip asking you for your login email. On Windows you have to use `set`, [example](https://github.com/vogler/free-games-claimer/issues/314).
+On Linux/macOS you can prefix the variables you want to set, for example `EMAIL=foo@bar.baz node epic-games` will skip asking you for your login email. On Windows you have to use `set`, [example](https://github.com/vogler/free-games-claimer/issues/314).
 You can also put options in `data/config.env` which will be loaded by [dotenv](https://github.com/motdotla/dotenv).
 
 ### Notifications
@@ -208,9 +206,6 @@ Added notifications via [apprise](https://github.com/caronc/apprise).
 </details>
 
 [![Star History Chart](https://api.star-history.com/svg?repos=caycehouse/free-games-claimer&type=Date)](https://star-history.com/#caycehouse/free-games-claimer&Date)
-<!-- [![Stargazers over time](https://starchart.cc/caycehouse/free-games-claimer.svg?variant=adaptive)](https://starchart.cc/caycehouse/free-games-claimer) -->
-
-![Alt](https://repobeats.axiom.co/api/embed/a1c5e6e420d90e0d6b34c1285e92a69a44138faa.svg "Repobeats analytics image")
 
 ---
 
