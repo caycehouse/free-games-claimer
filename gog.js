@@ -17,7 +17,7 @@ if (cfg.width < 1280) { // otherwise 'Sign in' and #menuUsername are hidden (but
 
 // https://playwright.dev/docs/auth#multi-factor-authentication
 const context = await chromium.launchPersistentContext(cfg.dir.browser, {
-  channel: "chrome",
+  channel: 'chrome',
   headless: cfg.headless,
   viewport: { width: cfg.width, height: cfg.height },
   locale: 'en-US', // ignore OS locale to be sure to have english text for locators -> done via /en in URL

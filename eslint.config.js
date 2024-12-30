@@ -13,9 +13,11 @@ export default [
   },
   js.configs.recommended, // TODO still needed?
   {
-    // files: ['*.js'],
     languageOptions: {
-      globals: globals.node,
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
     },
     plugins: {
       '@stylistic/js': stylistic,
