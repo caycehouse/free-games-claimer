@@ -15,8 +15,6 @@ Pull requests welcome :)
 
 _Works on Windows/macOS/Linux._
 
-Raspberry Pi (3, 4, Zero 2): [requires 64-bit OS](https://github.com/vogler/free-games-claimer/issues/3) like Raspberry Pi OS or Ubuntu (Raspbian won't work since it's 32-bit).
-
 ## How to run
 Easy option: [install Docker](https://docs.docker.com/get-docker/) (or [podman](https://podman-desktop.io/)) and run this command in a terminal:
 ```
@@ -34,12 +32,10 @@ Data (including json files with claimed games, codes to redeem, screenshots) is 
 1. [Install Node.js](https://nodejs.org/en/download)
 2. Clone/download this repository and `cd` into it in a terminal
 3. Run `npm install`
-4. Run `pip install apprise` (or use [pipx](https://github.com/pypa/pipx) if you have [problems](https://stackoverflow.com/questions/75608323/how-do-i-solve-error-externally-managed-environment-every-time-i-use-pip-3)) to install [apprise](https://github.com/caronc/apprise) if you want notifications
-5. To get updates: `git pull; npm install`
-6. Run `node epic-games`, `node prime-gaming`, `node gog`...
-
-During `npm install` Playwright will download its Firefox to a cache in home ([doc](https://playwright.dev/docs/browsers#managing-browser-binaries)).
-If you are missing some dependencies for the browser on your system, you can use `sudo npx playwright install firefox --with-deps`.
+4. Run `npx patchright install chrome`
+5. Run `pip install apprise` (or use [pipx](https://github.com/pypa/pipx) if you have [problems](https://stackoverflow.com/questions/75608323/how-do-i-solve-error-externally-managed-environment-every-time-i-use-pip-3)) to install [apprise](https://github.com/caronc/apprise) if you want notifications
+6. To get updates: `git pull; npm install`
+7. Run `node epic-games`, `node prime-gaming`, `node gog`...
 
 If you don't want to use Docker for quasi-headless mode, you could run inside a virtual machine, on a server, or you wake your PC at night to avoid being interrupted.
 </details>
@@ -59,35 +55,33 @@ After login, the script will continue claiming the current games. If it still wa
 ### Configuration / Options
 Options are set via [environment variables](https://kinsta.com/knowledgebase/what-is-an-environment-variable/) which allow for flexible configuration.
 
-TODO: ~~On the first run, the script will guide you through configuration and save all settings to `data/config.env`. You can edit this file directly or run `node fgc config` to run the configuration assistant again.~~
-
 Available options/variables and their default values:
 
-| Option        	| Default 	| Description                                                            	|
-|---------------	|---------	|------------------------------------------------------------------------	|
-| WIDTH         	| 1280    	| Width of the opened browser (and of screen for VNC in Docker).         	|
-| HEIGHT        	| 1280    	| Height of the opened browser (and of screen for VNC in Docker).        	|
-| VNC_PASSWORD  	|         	| VNC password for Docker. No password used by default!                  	|
-| NOTIFY        	|         	| Notification services to use (Pushover, Slack, Telegram...), see below. [Apprise](https://github.com/caronc/apprise)	|
-| NOTIFY_TITLE  	|         	| Optional title for notifications, e.g. for Pushover.                   	|
-| BROWSER_DIR   	| data/browser	| Directory for browser profile, e.g. for multiple accounts.         	|
-| TIMEOUT       	| 60      	| Timeout for any page action. Should be fine even on slow machines.     	|
-| LOGIN_TIMEOUT 	| 180     	| Timeout for login in seconds. Will wait twice (prompt + manual login). 	|
-| EMAIL         	|         	| Default email for any login.                                           	|
-| PASSWORD      	|         	| Default password for any login.                                        	|
-| EG_EMAIL      	|         	| Epic Games email for login. Overrides EMAIL.                           	|
-| EG_PASSWORD   	|         	| Epic Games password for login. Overrides PASSWORD.                     	|
-| EG_OTPKEY     	|         	| Epic Games MFA OTP key.                                                	|
-| EG_PARENTALPIN 	|         	| Epic Games Parental Controls PIN.                                      	|
-| PG_EMAIL      	|         	| Prime Gaming email for login. Overrides EMAIL.                         	|
-| PG_PASSWORD   	|         	| Prime Gaming password for login. Overrides PASSWORD.                   	|
-| PG_OTPKEY     	|         	| Prime Gaming MFA OTP key.                                              	|
-| PG_REDEEM     	| 0       	| Prime Gaming: try to redeem keys on external stores ([experimental](https://github.com/vogler/free-games-claimer/issues/5)).    	|
-| PG_CLAIMDLC   	| 0       	| Prime Gaming: try to claim DLCs ([experimental](https://github.com/vogler/free-games-claimer/issues/55)).    	|
-| GOG_EMAIL     	|         	| GOG email for login. Overrides EMAIL.                                  	|
-| GOG_PASSWORD  	|         	| GOG password for login. Overrides PASSWORD.                            	|
-| GOG_NEWSLETTER	| 0       	| Do not unsubscribe from newsletter after claiming a game if 1.         	|
-| LG_EMAIL        |         	| Legacy Games: email to use for redeeming (if not set, defaults to PG_EMAIL)  |
+| Option         | Default      | Description                                                                                                                  |
+|----------------|--------------|------------------------------------------------------------------------------------------------------------------------------|
+| WIDTH          | 1920         | Width of the opened browser (and of screen for VNC in Docker).                                                               |
+| HEIGHT         | 1080         | Height of the opened browser (and of screen for VNC in Docker).                                                              |
+| VNC_PASSWORD   |              | VNC password for Docker. No password used by default!                                                                        |
+| NOTIFY         |              | Notification services to use (Pushover, Slack, Telegram...), see below. [Apprise](https://github.com/caronc/apprise)         |
+| NOTIFY_TITLE   |              | Optional title for notifications, e.g. for Pushover.                                                                         |
+| BROWSER_DIR    | data/browser | Directory for browser profile, e.g. for multiple accounts.                                                                   |
+| TIMEOUT        | 60           | Timeout for any page action. Should be fine even on slow machines.                                                           |
+| LOGIN_TIMEOUT  | 180          | Timeout for login in seconds. Will wait twice (prompt + manual login).                                                       |
+| EMAIL          |              | Default email for any login.                                                                                                 |
+| PASSWORD       |              | Default password for any login.                                                                                              |
+| EG_EMAIL       |              | Epic Games email for login. Overrides EMAIL.                                                                                 |
+| EG_PASSWORD    |              | Epic Games password for login. Overrides PASSWORD.                                                                           |
+| EG_OTPKEY      |              | Epic Games MFA OTP key.                                                                                                      |
+| EG_PARENTALPIN |              | Epic Games Parental Controls PIN.                                                                                            |
+| PG_EMAIL       |              | Prime Gaming email for login. Overrides EMAIL.                                                                               |
+| PG_PASSWORD    |              | Prime Gaming password for login. Overrides PASSWORD.                                                                         |
+| PG_OTPKEY      |              | Prime Gaming MFA OTP key.                                                                                                    |
+| PG_REDEEM      | 0            | Prime Gaming: try to redeem keys on external stores ([experimental](https://github.com/vogler/free-games-claimer/issues/5)). |
+| PG_CLAIMDLC    | 0            | Prime Gaming: try to claim DLCs ([experimental](https://github.com/vogler/free-games-claimer/issues/55)).                    |
+| GOG_EMAIL      |              | GOG email for login. Overrides EMAIL.                                                                                        |
+| GOG_PASSWORD   |              | GOG password for login. Overrides PASSWORD.                                                                                  |
+| GOG_NEWSLETTER | 0            | Do not unsubscribe from newsletter after claiming a game if 1.                                                               |
+| LG_EMAIL       |              | Legacy Games: email to use for redeeming (if not set, defaults to PG_EMAIL)                                                  |
 
 See `src/config.js` for all options.
 
@@ -154,8 +148,6 @@ If you want it to run regularly, you have to schedule the runs yourself:
 - any OS: use a process manager like [pm2](https://pm2.keymetrics.io/docs/usage/restart-strategies/)
 - Docker Compose `command: bash -c "node epic-games; node prime-gaming; node gog; echo sleeping; sleep 1d"` additionally add `restart: unless-stopped` to it.
 
-TODO: ~~add some server-mode where the script just keeps running and claims games e.g. every day.~~
-
 ### Problems?
 
 Check the open [issues](https://github.com/caycehouse/free-games-claimer/issues) and comment there or open a new issue.
@@ -167,48 +159,17 @@ If you're a developer, you can use `PWDEBUG=1 ...` to [inspect](https://playwrig
 <details>
   <summary>Click to expand</summary>
 
-Tried [epicgames-freebies-claimer](https://github.com/Revadike/epicgames-freebies-claimer), but had problems since epicgames introduced hcaptcha (see [issue](https://github.com/Revadike/epicgames-freebies-claimer/issues/172)).
+  Reworked to use Chrome and Patchright.
 
-Played around with puppeteer before, now trying newer https://playwright.dev which is pretty similar.
-Playwright Inspector and `codegen` to generate scripts are nice, but failed to generate the right code for clicking a button in an iframe.
-
-Added [main.spec.ts](https://github.com/vogler/epicgames-claimer/commit/e5ce7916ab6329cfc7134677c4d89c2b3fa3ba97#diff-d18d03e9c407a20e05fbf03cbd6f9299857740544fb6b50d6a70b9c6fbc35831) which was the test script generated by `npx playwright codegen` with manual fix for clicking buttons in the created iframe. Can be executed by `npx playwright test`. The test runner has options `--debug` and `--timeout` and can execute typescript which is nice. However, this only worked up to the button 'I Agree', and then showed an hcaptcha.
-
-Added [main.captcha.js](https://github.com/vogler/epicgames-claimer/commit/e5ce7916ab6329cfc7134677c4d89c2b3fa3ba97#diff-d18d03e9c407a20e05fbf03cbd6f9299857740544fb6b50d6a70b9c6fbc35831) which uses beta of `playwright-extra@next` and `@extra/recaptcha@next` (from [comment on puppeteer-extra](https://github.com/berstend/puppeteer-extra/pull/303#issuecomment-775277480)).
-However, `playwright-extra` seems to be old and missing `:has-text` selector (fixed [here](https://github.com/vogler/epicgames-claimer/commit/ba97a0e840b65f4476cca18e28d8461b0c703420)) and `page.frameLocator`, so the script did not run without adjustments.
-Also, solving via [2captcha](https://2captcha.com?from=13225256) is a paid service which takes time and may be unreliable.
-<!-- Alternative: https://anti-captcha.com -->
-
-Added [main.stealth.js](https://github.com/vogler/epicgames-claimer/commit/64d0ba8ce71baec3947d1b64acd567befcb39340#diff-f70d3bd29df4a343f11062a97063953173491ce30fe34f69a0fc52517adbf342) which uses the stealth plugin without `playwright-extra` wrapper but up-to-date `playwright` (from [comment](https://github.com/berstend/puppeteer-extra/issues/454#issuecomment-917437212)).
-The listed evasions are enough to not show an hcaptcha. Script claimed game successfully in non-headless mode.
-
-Removed `main.captcha.js`.
-Using Playwright Test (`main.spec.ts`) instead of Library (`main.stealth.js`) has the advantage of free CLI like `--debug` and `--timeout`.
-<!-- TODO: check if stealth plugin can be setup with `contextOptions` ([doc](https://playwright.dev/docs/test-configuration#more-browser-and-context-options)). -->
-
-Button selectors should preferably use text in order to be more stable against changes in the DOM.
-
-Renamed repository from epicgames-claimer to free-games-claimer since a script for Amazon Prime Gaming was also added. Removed all old scripts in favor of just `epic-games.js` and `prime-gaming.js`.
-
-epic games: `headless` mode gets hcaptcha challenge. More details/references in [issue](https://github.com/vogler/free-games-claimer/issues/2).
-
-https://github.com/vogler/free-games-claimer/pull/11 introduced a Dockerfile for running non-headless inside the container via xvfb which makes it headless for the host running the container.
-
-v1.0 Standalone scripts node epic-games and node prime-gaming using Chromium.
-
-Changed to Firefox for all scripts since Chromium led to captchas. Claiming then also worked in headless mode without Docker.
-
-Added options via env vars, configurable in `data/config.env`.
-
-Added OTP generation via otplib for automatic login, even with 2FA.
-
-Added notifications via [apprise](https://github.com/caronc/apprise).
+  Fixed login on epic-games by enabling GLX and render for XVFB, ignoring GPU blocklist, and forcing angle/egl for Chrome.
 </details>
-
-[![Star History Chart](https://api.star-history.com/svg?repos=caycehouse/free-games-claimer&type=Date)](https://star-history.com/#caycehouse/free-games-claimer&Date)
 
 ---
 
 Logo with smaller aspect ratio (for Telegram bot etc.): 👾 - [emojipedia](https://emojipedia.org/alien-monster/)
 
 ![logo-fgc](https://user-images.githubusercontent.com/493741/214589922-093d6557-6393-421c-b577-da58ff3671bc.png)
+
+## Credits
+
+This project is heavily based on the fantastic work by [vogler](https://github.com/vogler/free-games-claimer) and contributors. I’ve made a number of fixes and adjustments to better suit my needs and address specific issues.
